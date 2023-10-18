@@ -23,15 +23,35 @@ def wikipedia_game_solver(start_page, target_page):
     visited = []
     queue = Queue()
     path = []
+    parent = {}
     
-    Queue.put(start_page.title)
+
+    queue.put(start_page.title)
+    visited.append(start_page.title)
 
     while not queue.empty():
-        # get from queue (queue.get())
-        # add to visited
-        # fetch the links
+        
+        current_title = queue.get()
 
-        # if my thing is in there, break
+        if current_title == target_page.title:
+            break
+
+        # visit my current_title
+        visited.append(current_title)
+        current_page = wiki_wiki.page(current_title)
+        next_level = fetch_links(current_page)
+
+        for node in next_level:
+            if node not in visited:
+                queue.put(node)
+                parent[node] = current_title
+
+    child = target_page.title
+    while child != start_page.title:
+        path.append(child)
+        child = parent[child]
+    path.append(start_page.title)
+    path.reverse()
 
     end_time = time.time()
     print("This algorithm took", end_time-start_time, "seconds to run!")
