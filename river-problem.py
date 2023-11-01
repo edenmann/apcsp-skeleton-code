@@ -14,7 +14,7 @@ def isValid(state):
 # This function will need to call the function isValid(state)
 def get_next_states(state):
 
-    next_state = []
+    next_states = []
     same_side = []
 
     for key in state:
@@ -32,11 +32,10 @@ def get_next_states(state):
     just_person = copy.deepcopy(state)
     just_person["person"] = not state["person"]
 
-    if isValid(temp_state) == True:
-        next_states.append(temp_state)
+    if isValid(just_person) == True:
+        next_states.append(just_person)
 
-        return next_states
-
+    return next_states
 
 
 # Define a recursive function that takes in a current_state and win_state and returns the path to those states using the Depth First Search algorithm
@@ -46,15 +45,16 @@ def dfs(current_state, win_state):
     if current_state == win_state:
         return True
 
-    next_states = get_next_states(current_state)
-    visited.append(next_states)
+    visited_states.append(current_state)
 
-    for state in next_states:
-        if state not in visited_states:
-            path.append(state)
-            if dfs(state, win_state) == True:
+    next_states = get_next_states(current_state)
+    
+    for next_state in next_states:
+        if next_state not in visited_states:
+            path.append(next_state)
+            if dfs(next_state, win_state):
                 return True
-                path.pop()
+            path.pop()
 
     
 # Test your code! Does it solve the river crossing riddle?
